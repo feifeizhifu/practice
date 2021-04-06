@@ -1,45 +1,72 @@
 <template>
-  <div id='app'>
-    <Composition :title='title'></Composition>
-    <button @click='changetitle' ref='btn'>点击</button>
-    
-  </div>
+  <div id="app">
+    <!-- <h2>TodoList</h2>
 
+    <div class="todolist">
+      <input type="text" v-model="val" @keyup.enter="addList" />
+      <h4>正在進行</h4>
+      <ul>
+        <li v-for="(item, index) in list" :key="index" v-show="!item.isChecked">
+          <input type="checkbox" v-model="item.isChecked" />
+          {{ item.value }}
+          ---- <button @click="del(index)">刪除</button>
+        </li>
+      </ul>
+    </div>
+    <h4>已完成</h4>
+    <ul>
+      <li v-for="(item, index) in list" :key="index" v-show="item.isChecked">
+        <input type="checkbox" v-model="item.isChecked" />
+        {{ item.value }}
+        ---- <button @click="del(index)">刪除</button>
+      </li>
+    </ul> -->
+    <suspense>
+      <template #default >
+        <asyncHello></asyncHello>
+      </template>
+      <template #fallback>
+        <div>正在拼了命的加载…</div>
+      </template>
+    </suspense>
+  </div>
 </template>
 
 <script>
-import Composition from './components/composition'
-import {reactive,readonly} from 'vue'
+import {defineAsyncComponent} from 'vue'
+const asyncHello=defineAsyncComponent(()=>import('./components/async-hello'))
 export default {
-  components:{
-    Composition
-  },
-  data(){
+  data() {
     return {
-      title:'学习'
-    }
+      val: "",
+      list: [],
+      arrList: [],
+    };
   },
-
+  mounted() {
+    setTimeout(() => {
+      this.arrList = ["a", "d", "r", "u"];
+    }, 2000);
+  },
   methods: {
-    changetitle(){
-      this.title='打游戏'
-  
-    }
+    addList() {
+      this.list.push({
+        value: this.val,
+        isChecked: false,
+      });
+    },
+    del(index) {
+      this.list.splice(index, 1);
+    },
   },
-  setup() {
-   let obj=reactive({
-            x:10,
-            y:{
-              z:10
-            }
-          })
-let obj1=readonly(obj)
-obj1.y.z=100
-console.log(obj)
+  components:{
+    asyncHello
   }
-}
+};
 </script>
 
 <style>
-
+#app {
+  width: 400px;
+}
 </style>
