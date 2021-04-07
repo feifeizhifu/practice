@@ -29,11 +29,14 @@
         <div>正在拼了命的加载…</div>
       </template>
     </suspense>
+  
   </div>
+    <parent/>
 </template>
 
 <script>
-import {defineAsyncComponent} from 'vue'
+import {defineAsyncComponent, reactive} from 'vue'
+import parent from './components/parent'
 const asyncHello=defineAsyncComponent(()=>import('./components/async-hello'))
 export default {
   data() {
@@ -60,7 +63,13 @@ export default {
     },
   },
   components:{
-    asyncHello
+    asyncHello,
+    parent
+  },
+  setup(){
+    let a=reactive([])
+   
+    console.log(a)
   }
 };
 </script>
