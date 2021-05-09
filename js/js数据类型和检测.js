@@ -24,4 +24,4 @@ console.log(Number.MAX_SAFE_INTEGER, Number.MIN_SAFE_INTEGER);
 
 //parseInt([value]) value以0x开头，默认会以16进制转10进制
 //  parseInt(0xad)=>173
-//parseInt(0123)=>83  value以0开头（浏览器），默认会以8进制转10进制
+//parseInt(0123)=>83  value以0开头（浏览器默认8进制，会以8进制转10进制）
