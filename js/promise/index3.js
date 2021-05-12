@@ -63,6 +63,9 @@ class Promise {
       }
     }
     const reject = (value) => {
+      if(value instanceof Promise){
+        return value.then(resolve,reject)
+      }
       if (this.status === PENDING) {
         this.reason = value
         this.status = REJECTED
@@ -118,7 +121,7 @@ class Promise {
       }
       if (this.status == REJECTED) {
         setTimeout(() => {
-          try {
+          try {9
             let x = onRejected(this.reason)
             resolvePromise(promise2, x, resolve, reject)
           } catch (e) {
@@ -131,5 +134,35 @@ class Promise {
     })
     return promise2
   }
+  static resolve(value){
+    return new Promise((resolve,reject)=>{
+      resolve(value)
+    })
+  }
+  static reject(value){
+    return new Promise((resolve,reject)=>{
+      reject(value)
+    })
+  }
+  catch(errorFn){
+    return this.then(null,errorFn)
+  }
+}
+//可以减少一层嵌套
+Promise.deferred=function(){
+  let dfd={}
+  dfd.promise=new Promise((resolve,reject)=>{
+    dfd.resolve=resolve
+    dfd.reject=reject
+  })
+  return dfd
 }
 module.exports = Promise
+// function readFile(filePath,encoding){
+//   let dfd=Promise.deferred()
+//   fs.readFile(filePath,encoding,(err,data)=>{
+//     if(err)return dfd.reject()
+//     dfd.resolve()
+//   })
+//    return dfd.promise
+// }
