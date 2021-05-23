@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //           this 永远指向最后调用它的那个对象
+      //   匿名函数的this永远指向window
+      //   使用.call()或者.apply()的函数是会直接执行的
+      //   bind()是创建一个新的函数，需要手动调用才会执行
+      //   如果call、apply、bind接收到的第一个参数是空或者null、undefined的话，则会忽略这个参数
+      //   forEach、map、filter函数的第二个参数也是能显式绑定this的
+
+      //你把一个函数当成参数传递到另一个函数的时候，也会发生隐式丢失的问题，且与包裹着它的函数的this指向无关。在非严格模式下，会把该函数的this绑定到window上，严格模式下绑定到undefined。
+      function foo() {
+        console.log(this.a);
+      }
+      function doFoo(fn) {
+        console.log(this);
+        fn();
+      }
+      var obj = {a: 1, foo};
+      var a = 2;
+      var obj2 = {a: 3, doFoo};
+
+      obj2.doFoo(obj.foo); //obj2,2
+
+      var obj1 = {
+        a: 1,
+      };
+      var obj2 = {
+        a: 2,
+        foo1: function () {
+          console.log(this.a);
+        },
+        foo2: function () {
+          setTimeout(function () {
+            console.log(this);
+            console.log(this.a);
+          }, 0);
+        },
+      };
+      var a = 3;
+
+      obj2.foo1();
+      obj2.foo2();
+
+      //如果call、apply、bind接收到的第一个参数是空或者null、undefined的话，则会忽略这个参数。
+      function foo() {
+        console.log(this.a);
+      }
+      var a = 2;
+      foo.call(); //2
+      foo.call(null); //2
+      foo.call(undefined); //2
+    </script>
+  </body>
+</html>
