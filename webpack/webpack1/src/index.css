@@ -1,0 +1,6 @@
+@import "./a.less";
+body {
+  background: #00f;
+  transform: rotate(90deg);
+  background: url("../../../image/1.jpg");
+}
