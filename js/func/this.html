@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //call
+      Function.prototype.myCall = function (context) {
+        context = context || window;
+        context.fn = this;
+        let arg = [...arguments].slice(1);
+        let result = context.fn(...arg);
+        delete context.fn;
+        return result;
+      };
+      //apply
+      Function.prototype.myApply = function (context) {
+        context = context || window;
+        context.fn = this;
+        let result;
+        if (arguments[1]) {
+          //判断是否有第二个参数
+          result = context.fn(...arguments[1]);
+        } else {
+          result = context.fn();
+        }
+        delete context.fn;
+        return result;
+      };
+      //bind
+      Function.prototype.my_bind = function () {
+        var self = this, // 保存原函数
+          context = Array.prototype.shift.call(arguments), // 保存需要绑定的this上下文
+          // 上一行等价于 context = [].shift.call(arguments);
+          args = Array.prototype.slice.call(arguments); // 剩余的参数转为数组
+        return function () {
+          // 返回一个新函数
+          self.apply(
+            context,
+            Array.prototype.concat.call(
+              args,
+              Array.prototype.slice.call(arguments)
+            )
+          );
+        };
+      };
+      Function.prototype.myBind = function (context) {
+        let args = [...arguments].slice(1);
+        let self = this;
+        return function () {
+          self.apply(context, [...args, ...arguments]);
+        };
+      };
+      var obj = {
+        name: 123,
+      };
+      function fn(age) {
+        console.log(this.name, age);
+      }
+      let a = fn.myBind(obj, 12);
+    </script>
+  </body>
+</html>

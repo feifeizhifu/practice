@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .swiper_wrap {
+        width: 300px;
+        height: 200px;
+        overflow: hidden;
+      }
+      .inner {
+        display: flex;
+      }
+      .swiper {
+        width: 300px;
+        flex-shrink: 0;
+        height: 200px;
+        background: #f00;
+      }
+      .inner {
+        /* transition: all 0.5s; */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="swiper_wrap">
+      <div class="inner">
+        <div class="swiper">1</div>
+        <div class="swiper" style="background: green">2</div>
+        <div class="swiper" style="background: #f0f">3</div>
+        <div class="swiper" style="background: #00f">4</div>
+        <div class="swiper">1</div>
+      </div>
+    </div>
+    <script>
+      //浏览器有渲染队列机制
+      var inner = document.getElementsByClassName("inner")[0];
+      inner.style.width = 300 * 5 + "px";
+      var current = 0;
+      let time;
+      time = setInterval(() => {
+        if (current === 4) {
+          current = 0;
+
+          inner.style.marginLeft = -current * 300 + "px";
+          inner.style.transition = "all 0s";
+          inner.offsetLeft;
+        }
+
+        current++;
+        inner.style.marginLeft = -current * 300 + "px";
+        inner.style.transition = "all 0.5s";
+      }, 1000);
+    </script>
+  </body>
+</html>
