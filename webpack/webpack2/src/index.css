@@ -1,0 +1,13 @@
+body {
+  background: #00f;
+}
+.wrap {
+  width: 100px;
+  height: 100px;
+}
+#app {
+  color: #f00;
+}
+.num {
+  font-size: 20px;
+}

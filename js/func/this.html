@@ -55,13 +55,71 @@
           self.apply(context, [...args, ...arguments]);
         };
       };
-      var obj = {
-        name: 123,
-      };
-      function fn(age) {
-        console.log(this.name, age);
-      }
-      let a = fn.myBind(obj, 12);
+      // var obj = {
+      //   name: 123,
+      // };
+      // function fn(age) {
+      //   console.log(this.name, age);
+      // }
+      // let a = fn.myBind(obj, 12);
+      // var obj = {name: "张三"};
+      // let obj1 = new Proxy(obj, {
+      //   set(target, propKey, value) {},
+      //   get(target, propKey) {
+      //     return target[propKey];
+      //   },
+      // });
+      // console.log(obj1, obj);
+      //new
+      /**
+       * 1.创建一个新对象
+       * 2.继承父类原型上的方法
+       * 3.添加父类的属性到新对象上并初始化，保存方法的执行结果
+       * 4.如果执行结果有返回值并且是一个对象，返回执行结果，否则返回新创建的对象
+       */
+      // function _new(obj, ...rest) {
+      //   const newObj = Object.create(obj.prototype);
+      //   const result = obj.apply(newObj, rest);
+      //   return typeof result === "object" ? result : newObj;
+      // }
+      // function Person(name, age) {
+      //   this.name = name;
+      //   this.age = age;
+      // }
+      // Person.prototype.getName = function () {
+      //   return this.name;
+      // };
+      // let a = _new(Person, " zhangsan", 12);
+      // console.log(a);
+      /**
+       * instanceof 判断构造函数的prototype属性是否出现在实例的原型链上
+       * auto(实例) instanceof Car(构造函数)
+       */
+      // function _instanceof(left, right) {
+      //   let proto = left.__proto__;
+      //   while (true) {
+      //     if (proto === null) return false;
+      //     if (proto === right.prototype) return true;
+      //     proto = proto.__proto__;
+      //   }
+      // }
+      /**
+       * Object.assgin
+       */
+      // function assgin(target, ...objs) {
+      //   if (target === null) throw error("target in null");
+      //   let res = Object(target);
+      //   objs.forEach((obj) => {
+      //     if (obj != null) {
+      //       for (let key in obj) {
+      //         if (obj.hasOwnProperty(key)) {
+      //           res[key] = obj[key];
+      //         }
+      //       }
+      //     }
+      //   });
+      //   return res;
+      // }
     </script>
   </body>
 </html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //原型链继承:子类型的原型为父类型的一个实例对象
+      // function Person(name, age) {
+      //   this.name = name;
+      //   this.age = age;
+      // }
+      // Person.prototype.getAge = function () {
+      //   return this.age;
+      // };
+      // function Student() {}
+      // Student.prototype = new Person();
+      // var s1 = new Student();
+      // 特点：
+      // 父类新增原型方法/原型属性，子类都能访问到
+      // 简单，易于实现
+      // 缺点：
+
+      // 无法实现多继承
+      // 来自原型对象的所有属性被所有实例共享
+      // 创建子类实例时，无法向父类构造函数传参
+      // 要想为子类新增属性和方法，必须要在Student.prototype = new Person() 之后执行，不能放到构造器中
+      //___________________________________________________________
+      //借用构造函数继承:在子类型构造函数中通过call()调用父类型构造函数
+      // function Person(name, age) {
+      //   (this.name = name), (this.age = age), (this.setName = function () {});
+      // }
+      // Person.prototype.setAge = function () {};
+      // function Student(name, age, price) {
+      //   Person.call(this, name, age); // 相当于: this.Person(name, age)
+      //   /*this.name = name
+      //     this.age = age*/
+      //   this.price = price;
+      // }
+      // var s1 = new Student("Tom", 20, 15000);
+      // console.log(s1.setAge()); //Uncaught TypeError: s1.setAge is not a function
+      // 特点：
+
+      // 解决了原型链继承中子类实例共享父类引用属性的问题
+      // 创建子类实例时，可以向父类传递参数
+      // 可以实现多继承(call多个父类对象)
+      // 缺点：
+
+      // 实例并不是父类的实例，只是子类的实例
+      // 只能继承父类的实例属性和方法，不能继承原型属性和方法
+      // 无法实现函数复用，每个子类都有父类实例函数的副本，影响性能
+      //_________________________________________________________
+      // 原型链+借用构造函数的组合继承:通过调用父类构造，继承父类的属性并保留传参的优点，然后通过将父类实例作为子类原型，实现函数复用。
+      // function Person(name, age) {
+      //   (this.name = name), (this.age = age), (this.setAge = function () {});
+      // }
+      // Person.prototype.setAge = function () {
+      //   console.log("111");
+      // };
+      // function Student(name, age, price) {
+      //   Person.call(this, name, age);
+      //   this.price = price;
+      //   this.setScore = function () {};
+      // }
+      // Student.prototype = new Person();
+      // Student.prototype.constructor = Student; //组合继承也是需要修复构造函数指向的
+      // Student.prototype.sayHello = function () {};
+      // var s1 = new Student("Tom", 20, 15000);
+      // var s2 = new Student("Jack", 22, 14000);
+      // console.log(s1);
+      // console.log(s1.constructor); //Student
+      // console.log(p1.constructor); //Person
+      // 优点：
+
+      // 可以继承实例属性/方法，也可以继承原型属性/方法
+      // 不存在引用属性共享问题
+      // 可传参
+      // 函数可复用
+      // 缺点：
+
+      // 调用了两次父类构造函数，生成了两份实例
+      //_________________________________________________________
+      //原型式继承
+
+      // function createObj(o) {
+      //   function F() {}
+      //   F.prototype = o;
+      //   return new F();
+      // }
+      // 跟原型链继承类似
+      // 重点：用一个函数包装一个对象，然后返回这个函数的调用，这个函数就变成了个可以随意增添属性的实例或对象。object.create()就是这个原理。
+      // 　　　　特点：类似于复制一个对象，用函数来包装。
+      // 　　　　缺点：1、所有实例都会继承原型上的属性。
+      // 　　　　　　　2、无法实现复用。（新实例属性都是后面添加的）
+      //-------------------------------------------------------
+      //寄生式继承
+      // function createObj(o) {
+      //   var clone = Object.create(o);
+      //   clone.sayName = function () {
+      //     console.log("hi");
+      //   };
+      //   return clone;
+      // }
+      // 缺点：跟借用构造函数模式一样，每次创建对象都会创建一遍方法。
+      //--------------------------------------------------
+      //寄生组合式继承
+      function inheritPrototype(subType, superType) {
+        var prototype = Object.create(superType.prototype); // 创建对象，创建父类原型的一个副本
+        prototype.constructor = subType; // 增强对象，弥补因重写原型而失去的默认的constructor 属性
+        subType.prototype = prototype; // 指定对象，将新创建的对象赋值给子类的原型
+      }
+      // 父类初始化实例属性和原型属性
+      function SuperType(name) {
+        console.log("SuperType");
+        this.name = name;
+        this.colors = ["red", "blue", "green"];
+      }
+      SuperType.prototype.sayName = function () {
+        alert(this.name);
+      };
+      // 借用构造函数传递增强子类实例属性（支持传参和避免篡改）
+      function SubType(name, age) {
+        SuperType.call(this, name);
+        this.age = age;
+      }
+      // 将父类原型指向子类
+      inheritPrototype(SubType, SuperType);
+      // 新增子类原型属性
+      SubType.prototype.sayAge = function () {
+        alert(this.age);
+      };
+      var instance1 = new SubType("xyc", 23);
+      // var instance2 = new SubType("lxy", 23);
+      instance1.colors.push("2"); // ["red", "blue", "green", "2"]
+      instance1.colors.push("3"); // ["red", "blue", "green", "3"]
+    </script>
+  </body>
+</html>
